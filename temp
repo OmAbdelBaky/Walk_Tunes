@@ -1,0 +1,102 @@
+//
+//  ViewController.swift
+//  Journal2.0
+//
+//  Created by Noam Cohen on 2019-01-26.
+//  Copyright © 2019 Noam Cohen. All rights reserved.
+//
+
+import UIKit
+import CoreLocation
+import Foundation
+
+//public var fullStrArr:[String]=[]
+class ViewController: UIViewController, CLLocationManagerDelegate {
+var word:String="hello world"
+
+let locationManager = CLLocationManager()
+
+
+
+
+
+override func viewDidLoad() {
+super.viewDidLoad()
+// Do any additional setup after loading the view, typically from a nib.
+locationManager.delegate=self
+locationManager.requestWhenInUseAuthorization()
+
+if CLLocationManager.locationServicesEnabled(){
+
+locationManager.desiredAccuracy = kCLLocationAccuracyBest
+locationManager.startUpdatingLocation()
+}/*
+let fileName = "data1"
+let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+
+let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
+let fileURLProject = Bundle.main.path(forResource: "data1", ofType: "txt")
+// Read from the file
+var readStringProject = ""
+do {
+readStringProject = try String(contentsOfFile: fileURLProject!, encoding: String.Encoding.utf8)
+} catch let error as NSError {
+print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+}
+fullStrArr = readStringProject.split{$0 == "\n"}.map(String.init)
+*/
+}
+@IBAction func button(_ sender: Any) {
+locationManager.requestLocation()
+let alertController = UIAlertController(title: "Welcome to My First App", message: "\(word)", preferredStyle: UIAlertController.Style.alert)
+alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+present(alertController, animated: true, completion: nil)
+
+}
+func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+if let lat = locations.last?.coordinate.latitude, let long = locations.last?.coordinate.longitude {
+word="\(lat)"+","+"\(long)"//+String(findPlays(radius:5,lat1:lat,lon1:long,file:fullStrArr).count)
+//print(findPlays(radius:1,lat1:lat,lon1:long,file:fullStrArr))
+print("\(lat),\(long)")
+} else {
+print("No coordinates")
+}
+}
+func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+print(error)
+}
+
+
+
+}/*
+func dist(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double{
+let radius = 6371000
+let lat1_rad = lat1 * Double.pi / 180
+let lat2_rad = lat2 * Double.pi / 180
+let lon1_rad = lon1 * Double.pi / 180
+let lon2_rad = lon2 * Double.pi / 180
+let de_lat = lat1_rad - lat2_rad
+let de_lon = lon1_rad - lon2_rad
+let a = pow(sin(de_lat / 2), 2) + cos(lat1_rad) * cos(lat2_rad) * pow(sin(de_lon / 2),2)
+let b = 2 * atan2(sqrt(a),sqrt(1 - a))
+return Double(radius) * b
+}
+func findPlays(radius:Int, lat1:Double, lon1:Double, file:[String])->[String]{
+var temp:[String]=[]
+for i in file{
+//print (i.split{$0 == ","}.map(String.init)[3])
+let fileLat=Double(i.split{$0 == ","}.map(String.init)[3])
+let fileLon=Double(i.split{$0 == ","}.map(String.init)[4])
+let deef = 0.0
+
+
+if (Int(dist(lat1:fileLat ?? deef, lon1: fileLon ?? deef, lat2:lat1, lon2:lon1 )) < radius){
+temp.append(i)
+}
+
+}
+return temp
+
+}
+*/
+

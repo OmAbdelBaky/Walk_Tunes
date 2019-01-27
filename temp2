@@ -1,0 +1,61 @@
+//
+//  ViewController.swift
+//  Journal2.0
+//
+//  Created by Noam Cohen on 2019-01-26.
+//  Copyright © 2019 Noam Cohen. All rights reserved.
+//
+
+import UIKit
+import CoreLocation
+import Foundation
+
+
+class ViewController: UIViewController, CLLocationManagerDelegate {
+var word:String="hello world"
+let locationManager = CLLocationManager()
+
+override func viewDidLoad() {
+super.viewDidLoad()
+// Do any additional setup after loading the view, typically from a nib.
+locationManager.delegate=self
+locationManager.requestWhenInUseAuthorization()
+
+if CLLocationManager.locationServicesEnabled(){
+
+locationManager.desiredAccuracy = kCLLocationAccuracyBest
+locationManager.startUpdatingLocation()
+}
+
+}
+@IBAction func button(_ sender: Any) {
+locationManager.requestLocation()
+let alertController = UIAlertController(title: "Welcome to My First App", message: "\(word)", preferredStyle: UIAlertController.Style.alert)
+alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+present(alertController, animated: true, completion: nil)
+
+}
+func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+if let lat = locations.last?.coordinate.latitude, let long = locations.last?.coordinate.longitude {
+word="\(lat),\(long)"
+print("\(lat),\(long)")
+} else {
+print("No coordinates")
+}
+}
+func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+print(error)
+}
+
+
+/*@IBAction func showMessage(sender: UIButton) {
+
+
+let alertController = UIAlertController(title: "Welcome to My First App", message: "\(word)", preferredStyle: UIAlertController.Style.alert)
+alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+present(alertController, animated: true, completion: nil)
+}*/
+
+
+}
+
